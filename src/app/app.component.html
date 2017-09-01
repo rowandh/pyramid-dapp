@@ -1,0 +1,73 @@
+<section class="hero is-medium is-info is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <img src="/assets/logo.jpeg"/>
+      <h1 class="title is-1">
+        Pyramid
+      </h1>
+      <h2 class="title">
+        Send 1 ether, receive 2
+      </h2>      
+      <h2 class="title" *ngIf="balance < 2">
+        You have referred <span class="is-medium has-underline">{{balance}}</span> people
+      </h2>
+      <h2 class="title" *ngIf="balance >= 2">
+          You have completed the pyramid and received 2 ether
+      </h2>      
+    </div>
+  </div>
+</section>
+<br>
+<div class="container" *ngIf="balance < 2">
+  <h1 class="title">Fund the Pyramid</h1>
+  <h1 class="title is-4 is-info help">{{status}}</h1>
+
+  <form #coinForm="ngForm">
+    <div class="field">
+      <label class="label">To Address</label>
+      <p class="control">
+        <input
+          [(ngModel)]="recipientAddress"
+          name="recipientAddress"
+          class="input"
+          type="text"
+          placeholder="0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"
+          name="recipientAddress"
+          required
+          #recipientAddressModel="ngModel"
+        >
+      </p>
+      <div *ngIf="recipientAddressModel.errors && (recipientAddressModel.dirty || recipientAddressModel.touched)"
+           class="help is-danger">
+          <p [hidden]="!recipientAddressModel.errors.required">
+            This field is required
+          </p>
+      </div>
+      <div *ngIf="!recipientAddressModel.errors && (recipientAddressModel.dirty || recipientAddressModel.touched)"
+           class="help is-danger">
+          <p [hidden]="canBeNumber(recipientAddress)">
+            Must be a number
+          </p>
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <p class="control">
+        <button
+          [disabled]="!coinForm.valid"
+          (click)="contribute()"
+          class="button is-primary">
+          Send
+        </button>
+      </p>
+    </div>
+  </form>
+
+  <h1 class="title">Last Contributors</h1>
+  
+  <ul>
+      <li *ngFor="let account of accounts" (click)="changeRecipient(account)">
+          <a>{{ account }}</a></li>
+  </ul>
+
+</div>
