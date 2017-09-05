@@ -3,6 +3,7 @@ const Web3 = require('web3');
 const contract = require('truffle-contract');
 const pyramidContract = require('../../build/contracts/Pyramid.json');
 import { canBeNumber } from '../util/validation';
+import { ActivatedRoute } from '@angular/router';
 
 declare var window: any;
 
@@ -13,6 +14,7 @@ declare var window: any;
 export class AppComponent {
   Pyramid = contract(pyramidContract);
 
+  refereeAddress: string;
   account: any;
   accounts: any;
   web3: any;
@@ -26,8 +28,7 @@ export class AppComponent {
   status: string;
   canBeNumber = canBeNumber;
 
-  constructor(private _ngZone: NgZone) {
-
+  constructor(private _ngZone: NgZone, private route: ActivatedRoute) {
   }
 
   @HostListener('window:load')
@@ -58,6 +59,12 @@ export class AppComponent {
   onReady = () => {    
     this.Pyramid.setProvider(this.web3.currentProvider);
 
+    this.route.queryParams.subscribe(p => this.refereeAddress = p["r"]);
+    
+    if (this.refereeAddress) {
+      this.changeRecipient(this.refereeAddress);
+    }
+    
     // Get the initial account balance so it can be displayed.
     this.web3.eth.getAccounts((err, accs) => {
       if (err != null) {
@@ -72,13 +79,12 @@ export class AppComponent {
         return;
       }
       this.accounts = accs;
-      this.account = this.accounts[0];
+      this.account = this.accounts[2];
       console.log(this.account);
       // This is run from window:load and ZoneJS is not aware of it we
       // need to use _ngZone.run() so that the UI updates on promise resolution
       this._ngZone.run(() => {
         this.getRefereeCount();
-        this.getOwner();    
         this.getContributionStatus();
       });
     });
@@ -96,22 +102,6 @@ export class AppComponent {
 
   changeRecipient(address) {
     this.recipientAddress = address;
-  }
-
-  getOwner = () => {
-    this.Pyramid
-      .deployed()
-      .then(instance => {
-        return instance.owner.call();
-      })
-      .then(owner => {
-        this.owner = owner;
-        this.recipientAddress = owner;
-      })
-      .catch(e => {
-        console.log(e);
-        this.setStatus("Error getting owner");
-      });
   }
 
   getRefereeCount = () => {

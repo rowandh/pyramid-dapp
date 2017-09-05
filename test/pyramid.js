@@ -120,10 +120,10 @@ contract("Pyramid", (accounts) => {
             startingBalance = balance;
         })
         .then(() => {
-            return instance.getReferreeCount.call(accountHasContributed);
+            return instance.getRefereeCount.call(accountHasContributed);
         })
-        .then(referreeCount => {
-            assert.isTrue(referreeCount == 0);
+        .then(refereeCount => {
+            assert.isTrue(refereeCount == 0);
         })
         .then(() => {
             return instance.contribute(accountHasContributed, { from: payoutTestAccount1, value: contributionAmount });
