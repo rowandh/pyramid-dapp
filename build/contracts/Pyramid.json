@@ -137,60 +137,6 @@
       "links": {},
       "address": "0xb50c3c6ee0cc4c9c547bc2b0affa5a9032b5828a",
       "updated_at": 1504632219238
-    },
-    "1504292959952": {
-      "events": {},
-      "links": {},
-      "address": "0xabc7a9a1dfd30b2f3f585538c79518040840f3ce",
-      "updated_at": 1504293001682
-    },
-    "1504298467652": {
-      "events": {},
-      "links": {},
-      "address": "0x5ff095bf99df09d497c6d884aa10b47abf252e1a",
-      "updated_at": 1504298489556
-    },
-    "1504298899126": {
-      "events": {},
-      "links": {},
-      "address": "0xecf7898690172b7ca58e4f8f0844afc95bf63cb5",
-      "updated_at": 1504298903166
-    },
-    "1504299329782": {
-      "events": {},
-      "links": {},
-      "address": "0xe21dab54cc82809ae94adb9aad6b94e5c7f3c643",
-      "updated_at": 1504299334257
-    },
-    "1504299407896": {
-      "events": {},
-      "links": {},
-      "address": "0x7fd5f2bfcee2bcb9212ddcca9fe0242df8196c08",
-      "updated_at": 1504299412051
-    },
-    "1504622914169": {
-      "events": {},
-      "links": {},
-      "address": "0x602196fb14d8eb2e169817a24c0367d09e55911a",
-      "updated_at": 1504622958442
-    },
-    "1504623502314": {
-      "events": {},
-      "links": {},
-      "address": "0xaaf501f3c1b2b38fc31a62478250afffeb2dae2e",
-      "updated_at": 1504623506947
-    },
-    "1504623874959": {
-      "events": {},
-      "links": {},
-      "address": "0xf3b2f7ae31788ff0c52980de45d3594c4241a042",
-      "updated_at": 1504623879838
-    },
-    "1504624290454": {
-      "events": {},
-      "links": {},
-      "address": "0x42186775639625104d6fd79ac554f71b255d247a",
-      "updated_at": 1504624300169
     }
   },
   "schema_version": "0.0.5",
