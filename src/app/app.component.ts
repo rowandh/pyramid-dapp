@@ -159,6 +159,19 @@ export class AppComponent {
           console.log("You have already contributed");
         }
         console.log("Contributing");
+        return instance.getRefereeCount.call(receiver);        
+      })
+      .then(refereeCount => {
+        // Incrementing this here is dodgy because there's no guarantee
+        // the tx will actually happen
+        console.log(refereeCount);
+        const count = refereeCount.add(1);
+
+        if (count.lt(2)) {
+          const database = window.firebase.database();
+          window.firebase.database().ref('contributions/' + receiver).set(count.toString('10'));        
+        }
+
         return instance.contribute(receiver, {
           from: this.account,
           value: this.web3.toWei(1, "ether")
@@ -167,15 +180,8 @@ export class AppComponent {
       .then(txHash => {
         console.log(txHash);
         this.hasContributed = true;
-        return instance.getRefereeCount.call(receiver);
-      })
-      .then(refereeCount => {
-        console.log("Setting referee count to:" + refereeCount);
-        var database = window.firebase.database();
-        window.firebase.database().ref('contributions/' + receiver).set(refereeCount.toString('10'));        
-      })
-      .then(txHash => {
         this.setStatus("Contribution received");
+        
       })
       .catch(e => {
         console.log(e);
