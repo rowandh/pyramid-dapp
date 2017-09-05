@@ -28,7 +28,7 @@ contract Pyramid {
         selfdestruct(owner);
     }
 
-    function getReferreeCount(address addr) public constant returns(uint count) {
+    function getRefereeCount(address addr) public constant returns(uint count) {
         return contributions[addr].referreeCount;
     }
     

@@ -13,11 +13,12 @@ declare var window: any;
 export class AppComponent {
   Pyramid = contract(pyramidContract);
 
-  // TODO add proper types these variables
   account: any;
   accounts: any;
   web3: any;
   owner: any;
+  lastContributions = [];
+  hasContributed: boolean;
 
   balance: number;
   sendingAmount: number;
@@ -71,15 +72,26 @@ export class AppComponent {
         return;
       }
       this.accounts = accs;
-      this.account = this.accounts[1];
-
+      this.account = this.accounts[0];
+      console.log(this.account);
       // This is run from window:load and ZoneJS is not aware of it we
       // need to use _ngZone.run() so that the UI updates on promise resolution
       this._ngZone.run(() => {
-        this.refreshBalance();
-        this.getOwner();        
+        this.getRefereeCount();
+        this.getOwner();    
+        this.getContributionStatus();
       });
     });
+    
+    const contribs = window.firebase.database().ref('contributions/');
+    contribs.on('value', (snapshot) => {
+      var items = snapshot.val();
+      this.lastContributions = Object.keys(items || {})
+        .filter(key => items[key] < 2)
+        .map(key => {
+          return { address: key, count: items[key] }
+        });
+    });    
   };
 
   changeRecipient(address) {
@@ -102,11 +114,11 @@ export class AppComponent {
       });
   }
 
-  refreshBalance = () => {
+  getRefereeCount = () => {
     this.Pyramid
       .deployed()
       .then(instance => {
-        return instance.getReferreeCount.call(this.account);
+        return instance.getRefereeCount.call(this.account);
       })
       .then(value => {
         this.balance = value;
@@ -116,6 +128,21 @@ export class AppComponent {
         this.setStatus('Error getting balance; see log.');
       });
   };
+
+  getContributionStatus = () => {
+    this.Pyramid
+      .deployed()
+      .then(instance => {
+        return instance.hasContributed.call(this.account);
+      })
+      .then(hasContributed => {
+        this.hasContributed = hasContributed;
+      })
+      .catch(e => {
+        console.log(e);
+        this.setStatus("Error checking contribution status");
+      });
+  }
 
   setStatus = message => {
     this.status = message;
@@ -132,24 +159,32 @@ export class AppComponent {
       })
       .then(isPaidOut => {
         if (isPaidOut) {
-          this.setStatus("You've already been paid out");
-          return;
+          console.log("You've already been paid out");
         }
         return instance.hasContributed.call(this.account);
       })
       .then(hasContributed => {
         if (hasContributed) {
-          this.setStatus("You have already contributed");
-          return;
+          console.log("You have already contributed");
         }
+        console.log("Contributing");
         return instance.contribute(receiver, {
           from: this.account,
           value: this.web3.toWei(1, "ether")
         });
       })
       .then(txHash => {
+        console.log(txHash);
+        this.hasContributed = true;
+        return instance.getRefereeCount.call(receiver);
+      })
+      .then(refereeCount => {
+        console.log("Setting referee count to:" + refereeCount);
+        var database = window.firebase.database();
+        window.firebase.database().ref('contributions/' + receiver).set(refereeCount.toString('10'));        
+      })
+      .then(txHash => {
         this.setStatus("Contribution received");
-        this.refreshBalance();
       })
       .catch(e => {
         console.log(e);

@@ -18,11 +18,11 @@
   </div>
 </section>
 <br>
-<div class="container" *ngIf="balance < 2">
+<div class="container">
   <h1 class="title">Fund the Pyramid</h1>
   <h1 class="title is-4 is-info help">{{status}}</h1>
 
-  <form #coinForm="ngForm">
+  <form #coinForm="ngForm" *ngIf="balance == 0 && !hasContributed">
     <div class="field">
       <label class="label">To Address</label>
       <p class="control">
@@ -63,11 +63,14 @@
     </div>
   </form>
 
+  <h1 class="title is-4 is-info help" *ngIf="hasContributed">You have contributed</h1>
+  
+
   <h1 class="title">Last Contributors</h1>
   
   <ul>
-      <li *ngFor="let account of accounts" (click)="changeRecipient(account)">
-          <a>{{ account }}</a></li>
+      <li *ngFor="let contribution of lastContributions" (click)="changeRecipient(contribution.address)">
+          <a>{{ contribution.address }} - {{ contribution.count }} referree/s</a></li>
   </ul>
 
 </div>
