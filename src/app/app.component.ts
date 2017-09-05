@@ -172,6 +172,15 @@ export class AppComponent {
           window.firebase.database().ref('contributions/' + receiver).set(nextCount.toString('10'));        
         }
 
+        return instance.getRefereeCount.call(this.account);
+      })
+      .then(accountRefereeCount => {
+
+        if (accountRefereeCount.eq(0)) {
+          const database = window.firebase.database();
+          window.firebase.database().ref('contributions/' + this.account).set('0');                  
+        }
+
         return instance.contribute(receiver, {
           from: this.account,
           value: this.web3.toWei(1, "ether")
