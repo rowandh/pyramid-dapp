@@ -165,11 +165,11 @@ export class AppComponent {
         // Incrementing this here is dodgy because there's no guarantee
         // the tx will actually happen
         console.log(refereeCount);
-        const count = refereeCount.add(1);
+        const nextCount = refereeCount.add(1);
 
-        if (count.lt(2)) {
+        if (refereeCount.lt(2)) {
           const database = window.firebase.database();
-          window.firebase.database().ref('contributions/' + receiver).set(count.toString('10'));        
+          window.firebase.database().ref('contributions/' + receiver).set(nextCount.toString('10'));        
         }
 
         return instance.contribute(receiver, {
