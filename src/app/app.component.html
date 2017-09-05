@@ -22,7 +22,7 @@
   <h1 class="title">Fund the Pyramid</h1>
   <h1 class="title is-4 is-info help">{{status}}</h1>
 
-  <form #coinForm="ngForm" *ngIf="balance == 0 && !hasContributed">
+  <form #coinForm="ngForm" *ngIf="!hasContributed">
     <div class="field">
       <label class="label">To Address</label>
       <p class="control">
@@ -57,7 +57,7 @@
           [disabled]="!coinForm.valid"
           (click)="contribute()"
           class="button is-primary">
-          Send
+          Send 1 Ether
         </button>
       </p>
     </div>
