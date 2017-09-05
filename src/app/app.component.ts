@@ -4,6 +4,7 @@ const contract = require('truffle-contract');
 const pyramidContract = require('../../build/contracts/Pyramid.json');
 import { canBeNumber } from '../util/validation';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from './../environments/environment';
 
 declare var window: any;
 
@@ -51,7 +52,7 @@ export class AppComponent {
       );
       // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
       this.web3 = new Web3(
-        new Web3.providers.HttpProvider('http://localhost:8545')
+        new Web3.providers.HttpProvider(environment["endpoint"])
       );
     }
   };
